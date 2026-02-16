@@ -1,18 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> G.O.A.T. THEATER: Movie Night - 1:40 PM</title>
+    <title>Terminator Movie Night - 1:30 PM</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap');
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Rajdhani', sans-serif;
@@ -24,17 +19,8 @@
         
         .scanline {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.1) 50%,
-                rgba(0,0,0,0.1)
-            );
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
             background-size: 100% 4px;
             pointer-events: none;
             z-index: 1000;
@@ -115,13 +101,11 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 30px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
         
         @media (min-width: 768px) {
-            .menu-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .menu-grid { grid-template-columns: 1fr 1fr; }
         }
         
         .category {
@@ -139,27 +123,55 @@
             border-color: rgba(233, 69, 96, 0.3);
         }
         
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
         .category-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
             color: #00d9ff;
-            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .category-title::after {
-            content: '';
-            flex: 1;
-            height: 2px;
-            background: linear-gradient(90deg, #00d9ff, transparent);
+        .skip-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #666;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .skip-btn:hover {
+            background: rgba(233, 69, 96, 0.3);
+            color: #e94560;
+            border-color: #e94560;
+        }
+        
+        .skip-btn.skipped {
+            background: rgba(102, 102, 102, 0.3);
+            color: #444;
+            border-color: #444;
         }
         
         .options {
             display: flex;
             flex-direction: column;
             gap: 15px;
+        }
+        
+        .options.disabled {
+            opacity: 0.3;
+            pointer-events: none;
         }
         
         .option {
@@ -186,21 +198,6 @@
             overflow: hidden;
         }
         
-        .option-label::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .option:hover .option-label::before {
-            left: 100%;
-        }
-        
         .option input[type="radio"]:checked + .option-label {
             background: rgba(233, 69, 96, 0.2);
             border-color: #e94560;
@@ -214,24 +211,14 @@
             color: #e94560;
             font-size: 1.5rem;
             font-weight: bold;
-            animation: checkPop 0.3s ease;
-        }
-        
-        @keyframes checkPop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
         }
         
         .icon {
             font-size: 2rem;
             margin-right: 15px;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
         }
         
-        .option-text {
-            flex: 1;
-        }
+        .option-text { flex: 1; }
         
         .option-name {
             font-size: 1.3rem;
@@ -245,9 +232,16 @@
             color: #a0a0a0;
         }
         
+        .hint-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
         .submit-section {
             text-align: center;
-            margin-top: 40px;
             padding: 30px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 20px;
@@ -266,16 +260,6 @@
             color: #fff;
             margin-bottom: 20px;
             outline: none;
-            transition: all 0.3s ease;
-        }
-        
-        .participant-name:focus {
-            border-color: #00d9ff;
-            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
-        }
-        
-        .participant-name::placeholder {
-            color: #666;
         }
         
         .submit-btn {
@@ -290,51 +274,15 @@
             letter-spacing: 3px;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
             box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
         }
         
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.6);
-        }
-        
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-        
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .submit-btn:hover::before {
-            left: 100%;
-        }
-        
-        /* TICKET STYLES */
         .ticket-section {
             margin-top: 40px;
             display: none;
         }
         
-        .ticket-section.show {
-            display: block;
-            animation: slideUp 0.5s ease;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .ticket-section.show { display: block; }
         
         .ticket {
             background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
@@ -351,10 +299,7 @@
         .ticket::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
+            top: 0; left: 0; right: 0; height: 8px;
             background: linear-gradient(90deg, #e94560, #ff6b6b, #feca57);
         }
         
@@ -372,13 +317,6 @@
             color: #e94560;
             text-transform: uppercase;
             letter-spacing: 3px;
-            margin-bottom: 5px;
-        }
-        
-        .ticket-movie {
-            font-size: 1.2rem;
-            color: #666;
-            font-weight: 600;
         }
         
         .ticket-time {
@@ -391,10 +329,6 @@
             margin-top: 10px;
         }
         
-        .ticket-content {
-            padding: 20px 0;
-        }
-        
         .ticket-item {
             display: flex;
             justify-content: space-between;
@@ -403,23 +337,25 @@
             border-bottom: 1px solid #eee;
         }
         
-        .ticket-item:last-child {
-            border-bottom: none;
-        }
+        .ticket-item.skipped-item { opacity: 0.5; }
         
         .ticket-label {
             font-weight: 600;
             color: #666;
             text-transform: uppercase;
             font-size: 0.9rem;
-            letter-spacing: 1px;
         }
         
         .ticket-value {
             font-weight: 700;
             color: #1a1a2e;
             font-size: 1.2rem;
-            text-align: right;
+        }
+        
+        .ticket-value.none {
+            color: #999;
+            font-style: italic;
+            font-weight: 400;
         }
         
         .ticket-footer {
@@ -434,16 +370,8 @@
             font-size: 1.2rem;
             color: #e94560;
             font-weight: 700;
-            letter-spacing: 2px;
         }
         
-        .ticket-hint {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 10px;
-        }
-        
-        /* TEXT VERSION FOR COPYING */
         .text-version {
             background: rgba(0,0,0,0.5);
             border: 2px solid #00d9ff;
@@ -455,18 +383,6 @@
             color: #00d9ff;
             white-space: pre-wrap;
             text-align: left;
-            position: relative;
-        }
-        
-        .text-version-label {
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #1a1a2e;
-            padding: 0 10px;
-            color: #00d9ff;
-            font-weight: 700;
-            font-size: 0.9rem;
         }
         
         .copy-btn {
@@ -480,15 +396,8 @@
             border-radius: 30px;
             cursor: pointer;
             margin-top: 15px;
-            transition: all 0.3s ease;
         }
         
-        .copy-btn:hover {
-            background: #fff;
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-        }
-        
-        /* ORDERS LIST */
         .orders-section {
             margin-top: 40px;
             padding: 30px;
@@ -498,17 +407,7 @@
             display: none;
         }
         
-        .orders-section.show {
-            display: block;
-            animation: slideUp 0.5s ease;
-        }
-        
-        .orders-section h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00d9ff;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .orders-section.show { display: block; }
         
         .order-card {
             background: rgba(255, 255, 255, 0.05);
@@ -527,43 +426,34 @@
             justify-content: space-between;
         }
         
-        .order-time {
-            font-size: 0.8rem;
-            color: #666;
-            font-weight: 400;
-        }
+        .order-time { font-size: 0.8rem; color: #666; }
         
         .order-details {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 8px;
-            color: #ccc;
-        }
-        
-        @media (min-width: 600px) {
-            .order-details {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
         }
         
         .order-detail-item {
             background: rgba(0,0,0,0.3);
             padding: 8px 12px;
             border-radius: 8px;
-            font-size: 0.95rem;
         }
         
         .detail-label {
             color: #666;
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 3px;
         }
         
         .detail-value {
             color: #feca57;
             font-weight: 600;
+        }
+        
+        .detail-value.none {
+            color: #666;
+            font-style: italic;
         }
         
         .reset-btn {
@@ -576,15 +466,6 @@
             border-radius: 30px;
             cursor: pointer;
             margin-top: 20px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        .reset-btn:hover {
-            background: #00d9ff;
-            color: #1a1a2e;
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
         }
         
         .notification {
@@ -599,27 +480,20 @@
             transform: translateX(400px);
             transition: transform 0.3s ease;
             z-index: 2000;
-            font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.2);
+n            font-weight: 600;
         }
         
-        .notification.show {
-            transform: translateX(0);
-        }
+        .notification.show { transform: translateX(0); }
         
         .screenshot-hint {
             background: rgba(254, 202, 87, 0.1);
             border: 2px solid #feca57;
             border-radius: 10px;
             padding: 15px;
-            margin-top: 20px;
+            margin: 20px 0;
             text-align: center;
             color: #feca57;
             font-weight: 600;
-        }
-        
-        .screenshot-hint::before {
-            content: '📱 ';
         }
     </style>
 </head>
@@ -635,136 +509,48 @@
         
         <div class="menu-grid">
             <!-- DRINKS -->
-            <div class="category">
-                <div class="category-title">🥤 Drinks</div>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="drink" value="Coke" required>
-                        <div class="option-label">
-                            <span class="icon">🥤</span>
-                            <div class="option-text">
-                                <div class="option-name">Coca-Cola</div>
-                                <div class="option-desc">Classic refreshment</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="drink" value="Sprite">
-                        <div class="option-label">
-                            <span class="icon">🍋</span>
-                            <div class="option-text">
-                                <div class="option-name">Sprite</div>
-                                <div class="option-desc">Lemon-lime crisp</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="drink" value="Cherry Coke">
-                        <div class="option-label">
-                            <span class="icon">🍒</span>
-                            <div class="option-text">
-                                <div class="option-name">Cherry Coke</div>
-                                <div class="option-desc">Cherry flavored cola</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="drink" value="Water">
-                        <div class="option-label">
-                            <span class="icon">💧</span>
-                            <div class="option-text">
-                                <div class="option-name">Water</div>
-                                <div class="option-desc">Pure & refreshing</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="drink" value="Lemonade">
-                        <div class="option-label">
-                            <span class="icon">🍋</span>
-                            <div class="option-text">
-                                <div class="option-name">Lemonade</div>
-                                <div class="option-desc">Fresh squeezed</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="drink" value="Hot Tea">
-                        <div class="option-label">
-                            <span class="icon">🍵</span>
-                            <div class="option-text">
-                                <div class="option-name">Hot Tea</div>
-                                <div class="option-desc">Warm & cozy</div>
-                            </div>
-                        </div>
-                    </label>
+            <div class="category" id="drinkCategory">
+                <div class="category-header">
+                    <div class="category-title">🥤 Drinks</div>
+                    <button class="skip-btn" onclick="skipCategory('drink')">Skip →</button>
+                </div>
+                <div class="options" id="drinkOptions">
+                    <label class="option"><input type="radio" name="drink" value="Coke"><div class="option-label"><span class="icon">🥤</span><div class="option-text"><div class="option-name">Coca-Cola</div><div class="option-desc">Classic refreshment</div></div></div></label>
+                    <label class="option"><input type="radio" name="drink" value="Sprite"><div class="option-label"><span class="icon">🍋</span><div class="option-text"><div class="option-name">Sprite</div><div class="option-desc">Lemon-lime crisp</div></div></div></label>
+                    <label class="option"><input type="radio" name="drink" value="Cherry Coke"><div class="option-label"><span class="icon">🍒</span><div class="option-text"><div class="option-name">Cherry Coke</div><div class="option-desc">Cherry flavored cola</div></div></div></label>
+                    <label class="option"><input type="radio" name="drink" value="Water"><div class="option-label"><span class="icon">💧</span><div class="option-text"><div class="option-name">Water</div><div class="option-desc">Pure & refreshing</div></div></div></label>
+                    <label class="option"><input type="radio" name="drink" value="Lemonade"><div class="option-label"><span class="icon">🍋</span><div class="option-text"><div class="option-name">Lemonade</div><div class="option-desc">Fresh squeezed</div></div></div></label>
+                    <label class="option"><input type="radio" name="drink" value="Hot Tea"><div class="option-label"><span class="icon">🍵</span><div class="option-text"><div class="option-name">Hot Tea</div><div class="option-desc">Warm & cozy</div></div></div></label>
                 </div>
             </div>
             
             <!-- SNACKS -->
-            <div class="category">
-                <div class="category-title">🍿 Snacks</div>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="snack" value="Popcorn" required>
-                        <div class="option-label">
-                            <span class="icon">🍿</span>
-                            <div class="option-text">
-                                <div class="option-name">Popcorn</div>
-                                <div class="option-desc">Classic buttered</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="snack" value="Popcorn with Grated Cheese">
-                        <div class="option-label">
-                            <span class="icon">🧀</span>
-                            <div class="option-text">
-                                <div class="option-name">Popcorn with Grated Cheese</div>
-                                <div class="option-desc">Cheesy goodness</div>
-                            </div>
-                        </div>
-                    </label>
+            <div class="category" id="snackCategory">
+                <div class="category-header">
+                    <div class="category-title">🍿 Snacks</div>
+                    <button class="skip-btn" onclick="skipCategory('snack')">Skip →</button>
+                </div>
+                <div class="options" id="snackOptions">
+                    <label class="option"><input type="radio" name="snack" value="Popcorn"><div class="option-label"><span class="icon">🍿</span><div class="option-text"><div class="option-name">Popcorn</div><div class="option-desc">Classic buttered</div></div></div></label>
+                    <label class="option"><input type="radio" name="snack" value="Popcorn with Grated Cheese"><div class="option-label"><span class="icon">🧀</span><div class="option-text"><div class="option-name">Popcorn with Grated Cheese</div><div class="option-desc">Cheesy goodness</div></div></div></label>
                 </div>
             </div>
             
             <!-- SWEETS -->
-            <div class="category" style="grid-column: 1 / -1;">
-                <div class="category-title">🍨 Sweets</div>
-                <div class="options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                    <label class="option">
-                        <input type="radio" name="sweet" value="Ice Cream Float" required>
-                        <div class="option-label">
-                            <span class="icon">🥤</span>
-                            <div class="option-text">
-                                <div class="option-name">Ice Cream Float</div>
-                                <div class="option-desc">Soda + ice cream</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="sweet" value="Waffle Ice Cream Sandwich">
-                        <div class="option-label">
-                            <span class="icon">🧇</span>
-                            <div class="option-text">
-                                <div class="option-name">Waffle Ice Cream Sandwich</div>
-                                <div class="option-desc">Crispy & creamy</div>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="sweet" value="Cookies">
-                        <div class="option-label">
-                            <span class="icon">🍪</span>
-                            <div class="option-text">
-                                <div class="option-name">Cookies</div>
-                                <div class="option-desc">Fresh baked</div>
-                            </div>
-                        </div>
-                    </label>
+            <div class="category" id="sweetCategory" style="grid-column: 1 / -1;">
+                <div class="category-header">
+                    <div class="category-title">🍨 Sweets</div>
+                    <button class="skip-btn" onclick="skipCategory('sweet')">Skip →</button>
+                </div>
+                <div class="options" id="sweetOptions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <label class="option"><input type="radio" name="sweet" value="Ice Cream Float"><div class="option-label"><span class="icon">🥤</span><div class="option-text"><div class="option-name">Ice Cream Float</div><div class="option-desc">Soda + ice cream</div></div></div></label>
+                    <label class="option"><input type="radio" name="sweet" value="Waffle Ice Cream Sandwich"><div class="option-label"><span class="icon">🧇</span><div class="option-text"><div class="option-name">Waffle Ice Cream Sandwich</div><div class="option-desc">Crispy & creamy</div></div></div></label>
+                    <label class="option"><input type="radio" name="sweet" value="Cookies"><div class="option-label"><span class="icon">🍪</span><div class="option-text"><div class="option-name">Cookies</div><div class="option-desc">Fresh baked</div></div></div></label>
                 </div>
             </div>
         </div>
+        
+        <div class="hint-text">Pick what you want, skip what you don't! At least one item required.</div>
         
         <div class="submit-section">
             <input type="text" class="participant-name" id="participantName" placeholder="Enter your name..." required>
@@ -774,53 +560,34 @@
         
         <!-- PERSONAL TICKET -->
         <div class="ticket-section" id="ticketSection">
-            <div class="ticket" id="personalTicket">
+            <div class="ticket">
                 <div class="ticket-header">
                     <div class="ticket-title">Food Ticket</div>
-                    <div class="ticket-movie">TERMINATOR Movie Night</div>
-                    <div class="ticket-time" id="ticketTime">1:30 PM</div>
+                    <div style="color: #666; font-weight: 600;">TERMINATOR Movie Night</div>
+                    <div class="ticket-time">1:30 PM</div>
                 </div>
                 <div class="ticket-content">
-                    <div class="ticket-item">
-                        <span class="ticket-label">Name</span>
-                        <span class="ticket-value" id="ticketName">-</span>
-                    </div>
-                    <div class="ticket-item">
-                        <span class="ticket-label">Drink</span>
-                        <span class="ticket-value" id="ticketDrink">-</span>
-                    </div>
-                    <div class="ticket-item">
-                        <span class="ticket-label">Snack</span>
-                        <span class="ticket-value" id="ticketSnack">-</span>
-                    </div>
-                    <div class="ticket-item">
-                        <span class="ticket-label">Sweet</span>
-                        <span class="ticket-value" id="ticketSweet">-</span>
-                    </div>
+                    <div class="ticket-item" id="ticketDrinkItem"><span class="ticket-label">Drink</span><span class="ticket-value" id="ticketDrink">-</span></div>
+                    <div class="ticket-item" id="ticketSnackItem"><span class="ticket-label">Snack</span><span class="ticket-value" id="ticketSnack">-</span></div>
+                    <div class="ticket-item" id="ticketSweetItem"><span class="ticket-label">Sweet</span><span class="ticket-value" id="ticketSweet">-</span></div>
                 </div>
                 <div class="ticket-footer">
                     <div class="ticket-code" id="ticketCode">#TERM-001</div>
-                    <div class="ticket-hint">Show this ticket at the concession stand</div>
+                    <div style="font-size: 0.8rem; color: #999; margin-top: 10px;">Show this ticket at the concession stand</div>
                 </div>
             </div>
             
-            <div class="screenshot-hint">
-                📸 Screenshot this ticket to save or share!
-            </div>
+            <div class="screenshot-hint">📸 Screenshot this ticket to save or share!</div>
             
-            <!-- TEXT VERSION FOR EASY COPYING -->
-            <div class="text-version">
-                <span class="text-version-label">TEXT VERSION (Tap to Copy)</span>
-                <div id="textVersionContent"></div>
-            </div>
+            <div class="text-version" id="textVersionContent" style="text-align: center; color: #666;">Your text order will appear here</div>
             <button class="copy-btn" onclick="copyTextVersion()">Copy Text to Share</button>
             
-            <button class="reset-btn" onclick="resetForm()" style="display: block; margin: 20px auto 0;">Place Another Order</button>
+            <button class="reset-btn" onclick="resetForm()">Place Another Order</button>
         </div>
         
-        <!-- ALL ORDERS LIST -->
+        <!-- ALL ORDERS -->
         <div class="orders-section" id="ordersSection">
-            <h2>📊 All Orders</h2>
+            <h2 style="text-align: center; color: #00d9ff; font-family: Orbitron; margin-bottom: 20px;">📊 All Orders</h2>
             <div id="ordersList"></div>
         </div>
     </div>
@@ -828,137 +595,26 @@
     <div class="notification" id="notification">Order Submitted!</div>
 
     <script>
-        // Load existing orders
+        let skipped = { drink: false, snack: false, sweet: false };
         let orders = JSON.parse(localStorage.getItem('terminatorOrders') || '[]');
-        
-        function submitOrder() {
-            const name = document.getElementById('participantName').value.trim();
-            const drink = document.querySelector('input[name="drink"]:checked');
-            const snack = document.querySelector('input[name="snack"]:checked');
-            const sweet = document.querySelector('input[name="sweet"]:checked');
-            
-            if(!name) {
-                showNotification('Please enter your name!', 'error');
-                return;
-            }
-            if(!drink || !snack || !sweet) {
-                showNotification('Please select one item from each category!', 'error');
-                return;
-            }
-            
-            const order = {
-                name: name,
-                drink: drink.value,
-                snack: snack.value,
-                sweet: sweet.value,
-                time: new Date().toLocaleTimeString(),
-                id: 'TERM-' + String(orders.length + 1).padStart(3, '0')
-            };
-            
-            orders.push(order);
-            localStorage.setItem('terminatorOrders', JSON.stringify(orders));
-            
-            // Show personal ticket
-            showTicket(order);
-            showNotification('Food Ticket Created! Screenshot it!');
-            
-            // Update orders list
-            displayOrders();
-        }
-        
-        function showTicket(order) {
-            document.getElementById('ticketName').textContent = order.name;
-            document.getElementById('ticketDrink').textContent = order.drink;
-            document.getElementById('ticketSnack').textContent = order.snack;
-            document.getElementById('ticketSweet').textContent = order.sweet;
-            document.getElementById('ticketCode').textContent = '#' + order.id;
-            document.getElementById('ticketTime').textContent = '1:30 PM';
-            
-            // Create text version for easy copying
-            const textContent = `🎬 TERMINATOR MOVIE NIGHT
-🕐 1:30 PM
-🎫 ${order.id}
-
-👤 ${order.name}
-🥤 ${order.drink}
-🍿 ${order.snack}
-🍨 ${order.sweet}
-
-Show this at the concession stand!`;
-            
-            document.getElementById('textVersionContent').textContent = textContent;
-            
-            document.getElementById('ticketSection').classList.add('show');
-            document.getElementById('ordersSection').classList.add('show');
-        }
-        
-        function copyTextVersion() {
-            const text = document.getElementById('textVersionContent').textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification('Copied! Paste in text message');
-            });
-        }
-        
-        function displayOrders() {
-            const ordersList = document.getElementById('ordersList');
-            
-            if(orders.length === 0) {
-                ordersList.innerHTML = '<p style="text-align: center; color: #666;">No orders yet</p>';
-                return;
-            }
-            
-            ordersList.innerHTML = orders.slice().reverse().map(order => `
-                <div class="order-card">
-                    <div class="order-name">
-                        ${order.name}
-                        <span class="order-time">${order.time}</span>
-                    </div>
-                    <div class="order-details">
-                        <div class="order-detail-item">
-                            <div class="detail-label">Drink</div>
-                            <div class="detail-value">${order.drink}</div>
-                        </div>
-                        <div class="order-detail-item">
-                            <div class="detail-label">Snack</div>
-                            <div class="detail-value">${order.snack}</div>
-                        </div>
-                        <div class="order-detail-item">
-                            <div class="detail-label">Sweet</div>
-                            <div class="detail-value">${order.sweet}</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function resetForm() {
-            document.getElementById('participantName').value = '';
-            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-            document.getElementById('ticketSection').classList.remove('show');
-            // Keep orders section visible to see all orders
-        }
-        
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.background = type === 'error' ? 'rgba(231, 76, 60, 0.9)' : 'rgba(46, 204, 113, 0.9)';
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Display existing orders on load
-        if(orders.length > 0) {
-            displayOrders();
-            document.getElementById('ordersSection').classList.add('show');
-        }
-        
-        // Keyboard support
-        document.addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') submitOrder();
-        });
-    </script>
-</body>
-</html>
+n        
+n        function skipCategory(category) {
+n            skipped[category] = !skipped[category];
+n            const btn = document.querySelector(`#${category}Category .skip-btn`);
+n            const options = document.getElementById(`${category}Options`);
+n            const inputs = options.querySelectorAll('input[type="radio"]');
+n            
+n            if(skipped[category]) {
+n                btn.textContent = 'Skipped ✓';
+n                btn.classList.add('skipped');
+n                options.classList.add('disabled');
+n                inputs.forEach(input => input.checked = false);
+n            } else {
+n                btn.textContent = 'Skip →';\n                btn.classList.remove('skipped');\n                options.classList.remove('disabled');\n            }\n        }\n        
+n        function submitOrder() {\n            const name = document.getElementById('participantName').value.trim();\n            const drink = document.querySelector('input[name="drink"]:checked');\n            const snack = document.querySelector('input[name="snack"]:checked');\n            const sweet = document.querySelector('input[name="sweet"]:checked');\n            \n            if(!name) {\n                showNotification('Please enter your name!', 'error');\n                return;\n            }\n            \n            const hasDrink = drink !== null || skipped.drink;\n            const hasSnack = snack !== null || skipped.snack;\n            const hasSweet = sweet !== null || skipped.sweet;\n            \n            if(!hasDrink && !hasSnack && !hasSweet) {\n                showNotification('Please select at least one item!', 'error');\n                return;\n            }\n            \n            const order = {\n                name: name,\n                drink: drink ? drink.value : 'None',\n                snack: snack ? snack.value : 'None',\n                sweet: sweet ? sweet.value : 'None',\n                time: new Date().toLocaleTimeString(),\n                id: 'TERM-' + String(orders.length + 1).padStart(3, '0')\n            };\n            \n            orders.push(order);\n            localStorage.setItem('terminatorOrders', JSON.stringify(orders));\n            \n            showTicket(order);\n            showNotification('Food Ticket Created!');\n            displayOrders();\n        }\n        
+n        function showTicket(order) {\n            document.getElementById('ticketDrink').textContent = order.drink;\n            document.getElementById('ticketSnack').textContent = order.snack;\n            document.getElementById('ticketSweet').textContent = order.sweet;\n            \n            document.getElementById('ticketDrinkItem').className = 'ticket-item' + (order.drink === 'None' ? ' skipped-item' : '');\n            document.getElementById('ticketSnackItem').className = 'ticket-item' + (order.snack === 'None' ? ' skipped-item' : '');\n            document.getElementById('ticketSweetItem').className = 'ticket-item' + (order.sweet === 'None' ? ' skipped-item' : '');\n            \n            document.getElementById('ticketDrink').className = 'ticket-value' + (order.drink === 'None' ? ' none' : '');\n            document.getElementById('ticketSnack').className = 'ticket-value' + (order.snack === 'None' ? ' none' : '');\n            document.getElementById('ticketSweet').className = 'ticket-value' + (order.sweet === 'None' ? ' none' : '');\n            \n            document.getElementById('ticketCode').textContent = '#' + order.id;\n            \n            let text = '🎬 TERMINATOR MOVIE NIGHT\\n🕐 1:30 PM\\n🎫 ' + order.id + '\\n\\n👤 ' + order.name;\n            if(order.drink !== 'None') text += '\\n🥤 ' + order.drink;\n            if(order.snack !== 'None') text += '\\n🍿 ' + order.snack;\n            if(order.sweet !== 'None') text += '\\n🍨 ' + order.sweet;\n            text += '\\n\\nShow this at the concession stand!';\n            \n            document.getElementById('textVersionContent').textContent = text;\n            document.getElementById('ticketSection').classList.add('show');\n            document.getElementById('ordersSection').classList.add('show');\n        }\n        
+n        function copyTextVersion() {\n            const text = document.getElementById('textVersionContent').textContent;\n            navigator.clipboard.writeText(text).then(() => {\n                showNotification('Copied to clipboard!');\n            });\n        }\n        
+n        function displayOrders() {\n            const list = document.getElementById('ordersList');\n            if(orders.length === 0) {\n                list.innerHTML = '<p style="text-align: center; color: #666;">No orders yet</p>';\n                return;\n            }\n            \n            list.innerHTML = orders.slice().reverse().map(order => `\n                <div class="order-card">\n                    <div class="order-name">${order.name}<span class="order-time">${order.time}</span></div>\n                    <div class="order-details">\n                        <div class="order-detail-item"><div class="detail-label">Drink</div><div class="detail-value ${order.drink === 'None' ? 'none' : ''}">${order.drink}</div></div>\n                        <div class="order-detail-item"><div class="detail-label">Snack</div><div class="detail-value ${order.snack === 'None' ? 'none' : ''}">${order.snack}</div></div>\n                        <div class="order-detail-item"><div class="detail-label">Sweet</div><div class="detail-value ${order.sweet === 'None' ? 'none' : ''}">${order.sweet}</div></div>\n                    </div>\n                </div>\n            `).join('');\n        }\n        
+n        function resetForm() {\n            document.getElementById('participantName').value = '';\n            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);\n            Object.keys(skipped).forEach(cat => {\n                skipped[cat] = false;\n                document.querySelector(`#${cat}Category .skip-btn`).textContent = 'Skip →';\n                document.querySelector(`#${cat}Category .skip-btn`).classList.remove('skipped');\n                document.getElementById(`${cat}Options`).classList.remove('disabled');\n            });\n            document.getElementById('ticketSection').classList.remove('show');\n        }\n        
+n        function showNotification(message, type = 'success') {\n            const n = document.getElementById('notification');\n            n.textContent = message;\n            n.style.background = type === 'error' ? 'rgba(231, 76, 60, 0.9)' : 'rgba(46, 204, 113, 0.9)';\n            n.classList.add('show');\n            setTimeout(() => n.classList.remove('show'), 3000);\n        }\n        
+n        if(orders.length > 0) {\n            displayOrders();\n            document.getElementById('ordersSection').classList.add('show');\n        }\n    </script>\n</body>\n</html>
