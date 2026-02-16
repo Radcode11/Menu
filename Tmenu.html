@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminator Movie Night - 1:30 PM</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #eaeaea;
+            overflow-x: hidden;
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 10s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, #e94560, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(233, 69, 96, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(233, 69, 96, 0.8)); }
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .time {
+            font-size: 1.2rem;
+            color: #feca57;
+            letter-spacing: 2px;
+            border: 2px solid #feca57;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-top: 10px;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .category {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(233, 69, 96, 0.3);
+        }
+        
+        .category-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #00d9ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #00d9ff, transparent);
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .option:hover .option-label::before {
+            left: 100%;
+        }
+        
+        .option input[type="radio"]:checked + .option-label {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: #e94560;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+        }
+        
+        .option input[type="radio"]:checked + .option-label::after {
+            content: '✓';
+            position: absolute;
+            right: 20px;
+            color: #e94560;
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: checkPop 0.3s ease;
+        }
+        
+        @keyframes checkPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+        }
+        
+        .option-text {
+            flex: 1;
+        }
+        
+        .option-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        
+        .option-desc {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .participant-name {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-family: 'Rajdhani', sans-serif;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .participant-name:focus {
+            border-color: #00d9ff;
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+        }
+        
+        .participant-name::placeholder {
+            color: #666;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.6);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        .results {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00d9ff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #e94560;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-name {
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .result-choice {
+            color: #feca57;
+            font-size: 0.9rem;
+        }
+        
+        .binary-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            font-family: monospace;
+            font-size: 14px;
+            color: #00ff00;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            white-space: pre;
+            line-height: 1.5;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(233, 69, 96, 0.9);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .reset-btn {
+            background: transparent;
+            border: 2px solid #00d9ff;
+            color: #00d9ff;
+            padding: 12px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .reset-btn:hover {
+            background: #00d9ff;
+            color: #1a1a2e;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="binary-bg" id="binaryBg"></div>
+    <div class="scanline"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>TERMINATOR</h1>
+            <div class="subtitle">Movie Night</div>
+            <div class="time">1:30 PM</div>
+        </div>
+        
+        <div class="menu-grid">
+            <div class="category">
+                <div class="category-title">🥤 Beverages</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="drink" value="Coke" required>
+                        <div class="option-label">
+                            <span class="icon">🥤</span>
+                            <div class="option-text">
+                                <div class="option-name">Coca-Cola</div>
+                                <div class="option-desc">Classic refreshment</div>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="drink" value="Sprite">
+                        <div class="option-label">
+                            <span class="icon">🍋</span>
+                            <div class="option-text">
+                                <div class="option-name">Sprite</div>
+                                <div class="option-desc">Lemon-lime crisp</div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">🍿 Popcorn</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="popcorn" value="Plain" required>
+                        <div class="option-label">
+                            <span class="icon">🍿</span>
+                            <div class="option-text">
+                                <div class="option-name">Plain Popcorn</div>
+                                <div class="option-desc">Classic buttered</div>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="popcorn" value="Cheese">
+                        <div class="option-label">
+                            <span class="icon">🧀</span>
+                            <div class="option-text">
+                                <div class="option-name">Cheese Popcorn</div>
+                                <div class="option-desc">Cheddar coated</div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="submit-section">
+            <input type="text" class="participant-name" id="participantName" placeholder="Enter your name..." required>
+            <br>
+            <button class="submit-btn" onclick="submitOrder()">Submit Order</button>
+        </div>
+        
+        <div class="results" id="resultsSection">
+            <h2>📊 Orders Submitted</h2>
+            <div id="ordersList"></div>
+            <button class="reset-btn" onclick="resetForm()">Place Another Order</button>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">Order Submitted Successfully!</div>
+
+    <script>
+        // Generate binary background
+        const binaryBg = document.getElementById('binaryBg');
+        let binaryText = '';
+        for(let i = 0; i < 500; i++) {
+            binaryText += Math.random() > 0.5 ? '1' : '0';
+            if(i % 50 === 0) binaryText += '\n';
+        }
+        binaryBg.textContent = binaryText;
+        
+        // Load existing orders from localStorage
+        let orders = JSON.parse(localStorage.getItem('terminatorOrders') || '[]');
+        if(orders.length > 0) {
+            displayOrders();
+        }
+        
+        function submitOrder() {
+            const name = document.getElementById('participantName').value.trim();
+            const drink = document.querySelector('input[name="drink"]:checked');
+            const popcorn = document.querySelector('input[name="popcorn"]:checked');
+            
+            if(!name) {
+                showNotification('Please enter your name!', 'error');
+                return;
+            }
+            if(!drink || !popcorn) {
+                showNotification('Please select both drink and popcorn!', 'error');
+                return;
+            }
+            
+            const order = {
+                name: name,
+                drink: drink.value,
+                popcorn: popcorn.value,
+                time: new Date().toLocaleTimeString()
+            };
+            
+            orders.push(order);
+            localStorage.setItem('terminatorOrders', JSON.stringify(orders));
+            
+            showNotification('Order Submitted Successfully!');
+            displayOrders();
+            
+            // Reset form fields but keep results visible
+            document.getElementById('participantName').value = '';
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        }
+        
+        function displayOrders() {
+            const resultsSection = document.getElementById('resultsSection');
+            const ordersList = document.getElementById('ordersList');
+            
+            ordersList.innerHTML = orders.map(order => `
+                <div class="result-item">
+                    <div>
+                        <div class="result-name">${order.name}</div>
+                        <div style="font-size: 0.8rem; color: #666; margin-top: 4px;">${order.time}</div>
+                    </div>
+                    <div class="result-choice">
+                        ${order.drink} + ${order.popcorn}
+                    </div>
+                </div>
+            `).join('');
+            
+            resultsSection.classList.add('show');
+        }
+        
+        function resetForm() {
+            document.getElementById('participantName').value = '';
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            document.getElementById('resultsSection').classList.remove('show');
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.background = type === 'error' ? 'rgba(231, 76, 60, 0.9)' : 'rgba(46, 204, 113, 0.9)';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Add keyboard support
+        document.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') submitOrder();
+        });
+    </script>
+</body>
+</html>
