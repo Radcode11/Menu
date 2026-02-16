@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G.O.A.T Theater: Movie Night - 2:00 PM</title>
+    <title>G.O.A.T Theater - 2:00 PM</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap');
         
@@ -59,7 +59,7 @@
         
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -480,7 +480,7 @@
             transform: translateX(400px);
             transition: transform 0.3s ease;
             z-index: 2000;
-n            font-weight: 600;
+            font-weight: 600;
         }
         
         .notification.show { transform: translateX(0); }
@@ -502,9 +502,9 @@ n            font-weight: 600;
     
     <div class="container">
         <div class="header">
-            <h1>TERMINATOR</h1>
+            <h1>G.O.A.T Theater</h1>
             <div class="subtitle">Movie Night</div>
-            <div class="time">1:30 PM</div>
+            <div class="time">2:00 PM</div>
         </div>
         
         <div class="menu-grid">
@@ -563,8 +563,8 @@ n            font-weight: 600;
             <div class="ticket">
                 <div class="ticket-header">
                     <div class="ticket-title">Food Ticket</div>
-                    <div style="color: #666; font-weight: 600;">TERMINATOR Movie Night</div>
-                    <div class="ticket-time">1:30 PM</div>
+                    <div style="color: #666; font-weight: 600;">G.O.A.T Theater Movie Night</div>
+                    <div class="ticket-time">2:00 PM</div>
                 </div>
                 <div class="ticket-content">
                     <div class="ticket-item" id="ticketDrinkItem"><span class="ticket-label">Drink</span><span class="ticket-value" id="ticketDrink">-</span></div>
@@ -572,7 +572,7 @@ n            font-weight: 600;
                     <div class="ticket-item" id="ticketSweetItem"><span class="ticket-label">Sweet</span><span class="ticket-value" id="ticketSweet">-</span></div>
                 </div>
                 <div class="ticket-footer">
-                    <div class="ticket-code" id="ticketCode">#TERM-001</div>
+                    <div class="ticket-code" id="ticketCode">#GOAT-001</div>
                     <div style="font-size: 0.8rem; color: #999; margin-top: 10px;">Show this ticket at the concession stand</div>
                 </div>
             </div>
@@ -596,25 +596,146 @@ n            font-weight: 600;
 
     <script>
         let skipped = { drink: false, snack: false, sweet: false };
-        let orders = JSON.parse(localStorage.getItem('terminatorOrders') || '[]');
-n        
-n        function skipCategory(category) {
-n            skipped[category] = !skipped[category];
-n            const btn = document.querySelector(`#${category}Category .skip-btn`);
-n            const options = document.getElementById(`${category}Options`);
-n            const inputs = options.querySelectorAll('input[type="radio"]');
-n            
-n            if(skipped[category]) {
-n                btn.textContent = 'Skipped ✓';
-n                btn.classList.add('skipped');
-n                options.classList.add('disabled');
-n                inputs.forEach(input => input.checked = false);
-n            } else {
-n                btn.textContent = 'Skip →';\n                btn.classList.remove('skipped');\n                options.classList.remove('disabled');\n            }\n        }\n        
-n        function submitOrder() {\n            const name = document.getElementById('participantName').value.trim();\n            const drink = document.querySelector('input[name="drink"]:checked');\n            const snack = document.querySelector('input[name="snack"]:checked');\n            const sweet = document.querySelector('input[name="sweet"]:checked');\n            \n            if(!name) {\n                showNotification('Please enter your name!', 'error');\n                return;\n            }\n            \n            const hasDrink = drink !== null || skipped.drink;\n            const hasSnack = snack !== null || skipped.snack;\n            const hasSweet = sweet !== null || skipped.sweet;\n            \n            if(!hasDrink && !hasSnack && !hasSweet) {\n                showNotification('Please select at least one item!', 'error');\n                return;\n            }\n            \n            const order = {\n                name: name,\n                drink: drink ? drink.value : 'None',\n                snack: snack ? snack.value : 'None',\n                sweet: sweet ? sweet.value : 'None',\n                time: new Date().toLocaleTimeString(),\n                id: 'TERM-' + String(orders.length + 1).padStart(3, '0')\n            };\n            \n            orders.push(order);\n            localStorage.setItem('terminatorOrders', JSON.stringify(orders));\n            \n            showTicket(order);\n            showNotification('Food Ticket Created!');\n            displayOrders();\n        }\n        
-n        function showTicket(order) {\n            document.getElementById('ticketDrink').textContent = order.drink;\n            document.getElementById('ticketSnack').textContent = order.snack;\n            document.getElementById('ticketSweet').textContent = order.sweet;\n            \n            document.getElementById('ticketDrinkItem').className = 'ticket-item' + (order.drink === 'None' ? ' skipped-item' : '');\n            document.getElementById('ticketSnackItem').className = 'ticket-item' + (order.snack === 'None' ? ' skipped-item' : '');\n            document.getElementById('ticketSweetItem').className = 'ticket-item' + (order.sweet === 'None' ? ' skipped-item' : '');\n            \n            document.getElementById('ticketDrink').className = 'ticket-value' + (order.drink === 'None' ? ' none' : '');\n            document.getElementById('ticketSnack').className = 'ticket-value' + (order.snack === 'None' ? ' none' : '');\n            document.getElementById('ticketSweet').className = 'ticket-value' + (order.sweet === 'None' ? ' none' : '');\n            \n            document.getElementById('ticketCode').textContent = '#' + order.id;\n            \n            let text = '🎬 TERMINATOR MOVIE NIGHT\\n🕐 1:30 PM\\n🎫 ' + order.id + '\\n\\n👤 ' + order.name;\n            if(order.drink !== 'None') text += '\\n🥤 ' + order.drink;\n            if(order.snack !== 'None') text += '\\n🍿 ' + order.snack;\n            if(order.sweet !== 'None') text += '\\n🍨 ' + order.sweet;\n            text += '\\n\\nShow this at the concession stand!';\n            \n            document.getElementById('textVersionContent').textContent = text;\n            document.getElementById('ticketSection').classList.add('show');\n            document.getElementById('ordersSection').classList.add('show');\n        }\n        
-n        function copyTextVersion() {\n            const text = document.getElementById('textVersionContent').textContent;\n            navigator.clipboard.writeText(text).then(() => {\n                showNotification('Copied to clipboard!');\n            });\n        }\n        
-n        function displayOrders() {\n            const list = document.getElementById('ordersList');\n            if(orders.length === 0) {\n                list.innerHTML = '<p style="text-align: center; color: #666;">No orders yet</p>';\n                return;\n            }\n            \n            list.innerHTML = orders.slice().reverse().map(order => `\n                <div class="order-card">\n                    <div class="order-name">${order.name}<span class="order-time">${order.time}</span></div>\n                    <div class="order-details">\n                        <div class="order-detail-item"><div class="detail-label">Drink</div><div class="detail-value ${order.drink === 'None' ? 'none' : ''}">${order.drink}</div></div>\n                        <div class="order-detail-item"><div class="detail-label">Snack</div><div class="detail-value ${order.snack === 'None' ? 'none' : ''}">${order.snack}</div></div>\n                        <div class="order-detail-item"><div class="detail-label">Sweet</div><div class="detail-value ${order.sweet === 'None' ? 'none' : ''}">${order.sweet}</div></div>\n                    </div>\n                </div>\n            `).join('');\n        }\n        
-n        function resetForm() {\n            document.getElementById('participantName').value = '';\n            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);\n            Object.keys(skipped).forEach(cat => {\n                skipped[cat] = false;\n                document.querySelector(`#${cat}Category .skip-btn`).textContent = 'Skip →';\n                document.querySelector(`#${cat}Category .skip-btn`).classList.remove('skipped');\n                document.getElementById(`${cat}Options`).classList.remove('disabled');\n            });\n            document.getElementById('ticketSection').classList.remove('show');\n        }\n        
-n        function showNotification(message, type = 'success') {\n            const n = document.getElementById('notification');\n            n.textContent = message;\n            n.style.background = type === 'error' ? 'rgba(231, 76, 60, 0.9)' : 'rgba(46, 204, 113, 0.9)';\n            n.classList.add('show');\n            setTimeout(() => n.classList.remove('show'), 3000);\n        }\n        
-n        if(orders.length > 0) {\n            displayOrders();\n            document.getElementById('ordersSection').classList.add('show');\n        }\n    </script>\n</body>\n</html>
+        let orders = JSON.parse(localStorage.getItem('goatOrders') || '[]');
+        
+        function skipCategory(category) {
+            skipped[category] = !skipped[category];
+            const btn = document.querySelector('#' + category + 'Category .skip-btn');
+            const options = document.getElementById(category + 'Options');
+            const inputs = options.querySelectorAll('input[type="radio"]');
+            
+            if(skipped[category]) {
+                btn.textContent = 'Skipped ✓';
+                btn.classList.add('skipped');
+                options.classList.add('disabled');
+                inputs.forEach(function(input) { input.checked = false; });
+            } else {
+                btn.textContent = 'Skip →';
+                btn.classList.remove('skipped');
+                options.classList.remove('disabled');
+            }
+        }
+        
+        function submitOrder() {
+            const name = document.getElementById('participantName').value.trim();
+            const drink = document.querySelector('input[name="drink"]:checked');
+            const snack = document.querySelector('input[name="snack"]:checked');
+            const sweet = document.querySelector('input[name="sweet"]:checked');
+            
+            if(!name) {
+                showNotification('Please enter your name!', 'error');
+                return;
+            }
+            
+            const hasDrink = drink !== null || skipped.drink;
+            const hasSnack = snack !== null || skipped.snack;
+            const hasSweet = sweet !== null || skipped.sweet;
+            
+            if(!hasDrink && !hasSnack && !hasSweet) {
+                showNotification('Please select at least one item!', 'error');
+                return;
+            }
+            
+            const order = {
+                name: name,
+                drink: drink ? drink.value : 'None',
+                snack: snack ? snack.value : 'None',
+                sweet: sweet ? sweet.value : 'None',
+                time: new Date().toLocaleTimeString(),
+                id: 'GOAT-' + String(orders.length + 1).padStart(3, '0')
+            };
+            
+            orders.push(order);
+            localStorage.setItem('goatOrders', JSON.stringify(orders));
+            
+            showTicket(order);
+            showNotification('Food Ticket Created!');
+            displayOrders();
+        }
+        
+        function showTicket(order) {
+            document.getElementById('ticketDrink').textContent = order.drink;
+            document.getElementById('ticketSnack').textContent = order.snack;
+            document.getElementById('ticketSweet').textContent = order.sweet;
+            
+            document.getElementById('ticketDrinkItem').className = 'ticket-item' + (order.drink === 'None' ? ' skipped-item' : '');
+            document.getElementById('ticketSnackItem').className = 'ticket-item' + (order.snack === 'None' ? ' skipped-item' : '');
+            document.getElementById('ticketSweetItem').className = 'ticket-item' + (order.sweet === 'None' ? ' skipped-item' : '');
+            
+            document.getElementById('ticketDrink').className = 'ticket-value' + (order.drink === 'None' ? ' none' : '');
+            document.getElementById('ticketSnack').className = 'ticket-value' + (order.snack === 'None' ? ' none' : '');
+            document.getElementById('ticketSweet').className = 'ticket-value' + (order.sweet === 'None' ? ' none' : '');
+            
+            document.getElementById('ticketCode').textContent = '#' + order.id;
+            
+            let text = '🎬 G.O.A.T THEATER\n🕐 2:00 PM\n🎫 ' + order.id + '\n\n👤 ' + order.name;
+            if(order.drink !== 'None') text += '\n🥤 ' + order.drink;
+            if(order.snack !== 'None') text += '\n🍿 ' + order.snack;
+            if(order.sweet !== 'None') text += '\n🍨 ' + order.sweet;
+            text += '\n\nShow this at the concession stand!';
+            
+            document.getElementById('textVersionContent').textContent = text;
+            document.getElementById('ticketSection').classList.add('show');
+            document.getElementById('ordersSection').classList.add('show');
+        }
+        
+        function copyTextVersion() {
+            const text = document.getElementById('textVersionContent').textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                showNotification('Copied to clipboard!');
+            });
+        }
+        
+        function displayOrders() {
+            const list = document.getElementById('ordersList');
+            if(orders.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #666;">No orders yet</p>';
+                return;
+            }
+            
+            let html = '';
+            for(let i = orders.length - 1; i >= 0; i--) {
+                const order = orders[i];
+                html += '<div class="order-card">';
+                html += '<div class="order-name">' + order.name + '<span class="order-time">' + order.time + '</span></div>';
+                html += '<div class="order-details">';
+                html += '<div class="order-detail-item"><div class="detail-label">Drink</div><div class="detail-value ' + (order.drink === 'None' ? 'none' : '') + '">' + order.drink + '</div></div>';
+                html += '<div class="order-detail-item"><div class="detail-label">Snack</div><div class="detail-value ' + (order.snack === 'None' ? 'none' : '') + '">' + order.snack + '</div></div>';
+                html += '<div class="order-detail-item"><div class="detail-label">Sweet</div><div class="detail-value ' + (order.sweet === 'None' ? 'none' : '') + '">' + order.sweet + '</div></div>';
+                html += '</div></div>';
+            }
+            list.innerHTML = html;
+        }
+        
+        function resetForm() {
+            document.getElementById('participantName').value = '';
+            document.querySelectorAll('input[type="radio"]').forEach(function(r) { r.checked = false; });
+            
+            skipped = { drink: false, snack: false, sweet: false };
+            
+            ['drink', 'snack', 'sweet'].forEach(function(cat) {
+                const btn = document.querySelector('#' + cat + 'Category .skip-btn');
+                const options = document.getElementById(cat + 'Options');
+                btn.textContent = 'Skip →';
+                btn.classList.remove('skipped');
+                options.classList.remove('disabled');
+            });
+            
+            document.getElementById('ticketSection').classList.remove('show');
+        }
+        
+        function showNotification(message, type) {
+            const n = document.getElementById('notification');
+            n.textContent = message;
+            n.style.background = type === 'error' ? 'rgba(231, 76, 60, 0.9)' : 'rgba(46, 204, 113, 0.9)';
+            n.classList.add('show');
+            setTimeout(function() { n.classList.remove('show'); }, 3000);
+        }
+        
+        if(orders.length > 0) {
+            displayOrders();
+            document.getElementById('ordersSection').classList.add('show');
+        }
+    </script>
+</body>
+</html>
